@@ -1,0 +1,22 @@
+#!/bin/bash
+#學習取得字串202001
+
+#取salt id
+owner_code=$(cat /etc/salt/minion_id  | awk -F\- '{print $1"-"$2}')
+echo -e salt_id: $owner_code
+echo -e ========================
+
+#agent_hostname
+agent_hostname=$(cat /etc/zabbix/zabbix_agentd.conf | grep -e Hostname=.* | awk -F'=' '{print $2}')
+echo -e agent_name: $agent_hostname
+echo -e ========================
+
+#抓取server name
+server_name=$(cat /opt/APP/openresty/nginx/conf/vhost/*conf | grep -v "server_name  _;\|#server_name" | grep server_name |  awk '{for (i=2; i <= NF; i++) {printf $i" "} printf "\n"}')
+echo -e confserver_name: $server_name
+echo -e ========================
+
+#取後端VIP
+vip=$(cat /opt/APP/openresty/nginx/conf/vhost/*.conf | grep -v "#server" | grep "server\ .*;$" | awk '{print $2}' | tail -2)
+echo -e 後端: $vip
+echo -e ========================
